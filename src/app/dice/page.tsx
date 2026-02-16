@@ -1,23 +1,55 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import { Dices } from "lucide-react";
+import { DiceRoller } from "@/components/dice/dice-roller";
+import { useCharacter } from "@/hooks/use-character";
+import { useStorage } from "@/hooks/use-storage";
+import type { FightingFantasyCharacter } from "@/lib/game-systems/fighting-fantasy";
+import { testLuck } from "@/lib/game-systems/fighting-fantasy";
+import type { DiceRoll, Character } from "@/lib/game-systems";
 
 export default function DicePage() {
+  const storage = useStorage();
+  const [lastId, setLastId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      const id = await storage.getLastCharacterId();
+      setLastId(id);
+    }
+    load();
+  }, [storage]);
+
+  const { character, updateCharacter } = useCharacter(lastId);
+
+  const ff = character as FightingFantasyCharacter | null;
+
+  const handleLuckTest = async (roll: DiceRoll, _lucky: boolean) => {
+    if (!ff) return;
+    const { lucky, newLuck } = testLuck(ff, roll.total);
+    await updateCharacter(
+      { currentLuck: newLuck } as Partial<Character>,
+      `Test de Chance : ${lucky ? "Chanceux" : "Malchanceux"} (${roll.total} vs ${ff.currentLuck})`
+    );
+  };
+
   return (
     <AppShell>
-      <div className="flex flex-col items-center px-4 pt-8">
-        <h1 className="font-display text-2xl text-primary">D&eacute;s</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Simulateur de d&eacute;s
-        </p>
-
-        {/* Placeholder pour le simulateur de d&eacute;s */}
-        <div className="mt-16 flex flex-col items-center gap-4 text-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-            <Dices className="h-10 w-10 text-muted-foreground" />
-          </div>
-          <p className="max-w-xs text-sm text-muted-foreground">
-            Le simulateur de d&eacute;s arrive bient&ocirc;t...
+      <div className="flex flex-col px-4 pt-6">
+        <div className="text-center">
+          <h1 className="font-display text-2xl text-primary">Dés</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Simulateur de dés
           </p>
+        </div>
+
+        <div className="mt-6">
+          <DiceRoller
+            showLuckTest={ff !== null && ff.currentLuck > 0}
+            currentLuck={ff?.currentLuck}
+            onLuckTest={handleLuckTest}
+          />
         </div>
       </div>
     </AppShell>

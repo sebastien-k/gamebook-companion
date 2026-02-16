@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, MedievalSharp } from "next/font/google";
+import { Providers } from "@/components/layout/providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,7 +48,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${medievalSharp.variable} font-sans antialiased`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

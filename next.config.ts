@@ -9,12 +9,14 @@ const revision =
 
 const withSerwist = withSerwistInit({
   additionalPrecacheEntries: [{ url: "/offline.html", revision }],
-  swSrc: "app/sw.ts",
+  swSrc: "src/sw.ts",
   swDest: "public/sw.js",
 });
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Turbopack config vide pour éviter l'erreur Next.js 16
+  // (Serwist utilise webpack, on garde turbopack: {} pour le silence)
+  turbopack: {},
 };
 
 export default withSerwist(nextConfig);
