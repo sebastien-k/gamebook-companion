@@ -124,7 +124,7 @@ export function CharacterSheet({
           </div>
 
           {/* Marque-page */}
-          <div className="flex flex-col items-end gap-0.5">
+          <div className="flex flex-col items-center gap-0.5">
             <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
               Marque-page
             </span>
