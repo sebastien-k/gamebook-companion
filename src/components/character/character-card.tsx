@@ -36,19 +36,17 @@ export function CharacterCard({
     >
       <CardContent className="p-4">
         {/* En-tête : nom + système */}
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate font-display text-lg text-primary">
-              {character.name || "Sans nom"}
-            </h3>
-            {character.bookTitle && (
-              <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-muted-foreground">
-                <BookOpen className="h-3 w-3 shrink-0" />
-                {character.bookTitle}
-              </p>
-            )}
-          </div>
-          <Badge variant="secondary" className="shrink-0 text-[10px]">
+        <div>
+          <h3 className="truncate font-display text-lg text-primary">
+            {character.name || "Sans nom"}
+          </h3>
+          {character.bookTitle && (
+            <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-muted-foreground">
+              <BookOpen className="h-3 w-3 shrink-0" />
+              {character.bookTitle}
+            </p>
+          )}
+          <Badge variant="secondary" className="mt-1.5 text-[10px]">
             {FIGHTING_FANTASY_CONFIG.shortName}
           </Badge>
         </div>
