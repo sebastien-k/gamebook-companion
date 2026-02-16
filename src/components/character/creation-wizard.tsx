@@ -9,7 +9,7 @@ import { rollCreationStat } from "@/lib/game-systems/fighting-fantasy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dices, RotateCcw, ChevronRight, Check } from "lucide-react";
+import { Dices, ChevronRight, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type WizardStep = "info" | "skill" | "stamina" | "luck" | "confirm";
@@ -317,28 +317,16 @@ function StatRollStep({
           {value !== null ? value : "?"}
         </div>
 
-        {/* Boutons */}
-        <div className="flex gap-3">
-          <Button
-            size="lg"
-            className="gap-2"
-            onClick={onRoll}
-            disabled={isRolling}
-          >
-            <Dices className="h-5 w-5" />
-            {value === null ? "Lancer" : "Relancer"}
-          </Button>
-          {value !== null && !isRolling && (
-            <Button
-              size="lg"
-              variant="ghost"
-              className="gap-2"
-              onClick={onRoll}
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
+        {/* Bouton de lancer */}
+        <Button
+          size="lg"
+          className="gap-2"
+          onClick={onRoll}
+          disabled={isRolling}
+        >
+          <Dices className="h-5 w-5" />
+          {value === null ? "Lancer" : "Relancer"}
+        </Button>
       </CardContent>
     </Card>
   );
