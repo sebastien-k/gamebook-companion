@@ -1,26 +1,138 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-gold: var(--gold);
+  --color-gold-dark: var(--gold-dark);
+  --color-gold-light: var(--gold-light);
+  --color-health: var(--health);
+  --color-health-low: var(--health-low);
+  --color-health-critical: var(--health-critical);
+  --color-luck: var(--luck);
+  --color-fear: var(--fear);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Thème médiéval sombre — Gamebook Companion */
+:root {
+  --radius: 0.625rem;
+
+  /* Palette principale : tons sombres bleu-nuit */
+  --background: oklch(0.16 0.02 270);
+  --foreground: oklch(0.92 0.01 80);
+
+  /* Cartes : légèrement plus clair que le fond */
+  --card: oklch(0.20 0.02 270);
+  --card-foreground: oklch(0.92 0.01 80);
+
+  /* Popover */
+  --popover: oklch(0.22 0.02 270);
+  --popover-foreground: oklch(0.92 0.01 80);
+
+  /* Or médiéval — couleur d'action principale */
+  --primary: oklch(0.78 0.14 85);
+  --primary-foreground: oklch(0.16 0.02 270);
+
+  /* Secondaire : pierre/ardoise */
+  --secondary: oklch(0.28 0.01 270);
+  --secondary-foreground: oklch(0.85 0.02 80);
+
+  /* Muted : fond atténué */
+  --muted: oklch(0.24 0.01 270);
+  --muted-foreground: oklch(0.62 0.02 80);
+
+  /* Accent : or doux */
+  --accent: oklch(0.35 0.04 80);
+  --accent-foreground: oklch(0.92 0.01 80);
+
+  /* Destructif : rouge sang */
+  --destructive: oklch(0.55 0.22 25);
+
+  /* Bordures et inputs */
+  --border: oklch(0.30 0.02 270);
+  --input: oklch(0.26 0.02 270);
+  --ring: oklch(0.78 0.14 85);
+
+  /* Couleurs spécifiques au jeu */
+  --gold: oklch(0.78 0.14 85);
+  --gold-dark: oklch(0.60 0.12 85);
+  --gold-light: oklch(0.88 0.10 85);
+  --health: oklch(0.65 0.18 145);
+  --health-low: oklch(0.70 0.18 60);
+  --health-critical: oklch(0.55 0.22 25);
+  --luck: oklch(0.65 0.15 280);
+  --fear: oklch(0.60 0.18 310);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+  /* Permettre la sélection dans les zones de texte */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Animations personnalisées */
+@keyframes dice-shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg) scale(1.1); }
+  50% { transform: rotate(15deg) scale(1.1); }
+  75% { transform: rotate(-10deg) scale(1.05); }
+}
+
+@keyframes pulse-critical {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes gold-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Safe area pour les iPhones avec notch/Dynamic Island */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Utilitaire pour la police display (titres médiévaux) */
+.font-display {
+  font-family: var(--font-display), serif;
 }

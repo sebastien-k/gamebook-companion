@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hors ligne — Gamebook Companion</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: oklch(0.16 0.02 270);
+      color: oklch(0.92 0.01 80);
+      text-align: center;
+      padding: 2rem;
+    }
+    .container { max-width: 400px; }
+    .icon { font-size: 4rem; margin-bottom: 1.5rem; }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: oklch(0.78 0.14 85);
+    }
+    p {
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+    button {
+      background: oklch(0.78 0.14 85);
+      color: oklch(0.16 0.02 270);
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0.625rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: scale(1.05); }
+    button:active { transform: scale(0.95); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">&#x2694;&#xFE0F;</div>
+    <h1>Hors ligne</h1>
+    <p>
+      Pas de connexion Internet. Vos personnages sauvegard&eacute;s
+      restent disponibles localement une fois l'application install&eacute;e.
+    </p>
+    <button onclick="window.location.reload()">
+      R&eacute;essayer
+    </button>
+  </div>
+</body>
+</html>
