@@ -123,17 +123,20 @@ export function CharacterSheet({
             )}
           </div>
 
-          {/* Tracker de page */}
-          <div className="flex items-center gap-1.5">
-            <span className="text-xs text-muted-foreground">&sect;</span>
+          {/* Marque-page */}
+          <div className="flex flex-col items-end gap-0.5">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+              Marque-page
+            </span>
             <input
               type="number"
               inputMode="numeric"
-              className="h-8 w-14 rounded border border-border bg-input text-center text-sm font-medium tabular-nums"
+              className="h-8 w-16 rounded border border-border bg-input text-center text-sm font-medium tabular-nums"
               value={character.currentPage || ""}
+              placeholder="§ ..."
               onChange={(e) => handlePageChange(parseInt(e.target.value) || 0)}
               min={0}
-              aria-label="Paragraphe en cours"
+              aria-label="Marque-page — paragraphe en cours"
             />
           </div>
         </div>

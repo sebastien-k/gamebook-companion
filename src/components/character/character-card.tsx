@@ -88,10 +88,10 @@ export function CharacterCard({
           </div>
         </div>
 
-        {/* Paragraphe en cours */}
+        {/* Marque-page */}
         {character.currentPage > 0 && (
           <div className="mt-2 text-xs text-muted-foreground">
-            &sect; {character.currentPage}
+            Marque-page : &sect; {character.currentPage}
           </div>
         )}
       </CardContent>
