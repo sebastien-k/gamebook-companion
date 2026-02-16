@@ -29,7 +29,7 @@ export function CharacterCard({
   return (
     <Card
       className={cn(
-        "relative cursor-pointer transition-all active:scale-[0.98]",
+        "group relative cursor-pointer transition-all active:scale-[0.98]",
         isSelected && "ring-2 ring-primary"
       )}
       onClick={() => onSelect(character.id)}
@@ -96,9 +96,9 @@ export function CharacterCard({
         )}
       </CardContent>
 
-      {/* Bouton supprimer (petite croix en haut à droite) */}
+      {/* Bouton supprimer (visible au hover desktop + toujours visible sur mobile) */}
       <button
-        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/20 hover:text-destructive group-hover:opacity-100"
+        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-opacity hover:bg-destructive/20 hover:text-destructive sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(character.id);

@@ -7,10 +7,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Download, Upload, Settings, AlertCircle, Check } from "lucide-react";
+import { Download, Upload, Settings, AlertCircle, Check, TriangleAlert } from "lucide-react";
 
 interface DataManagerProps {
   onImportComplete: () => void;
@@ -20,6 +21,8 @@ export function DataManager({ onImportComplete }: DataManagerProps) {
   const storage = useStorage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+  const [confirmImport, setConfirmImport] = useState(false);
+  const [pendingJson, setPendingJson] = useState<string | null>(null);
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
@@ -49,24 +52,25 @@ export function DataManager({ onImportComplete }: DataManagerProps) {
     }
   }, [storage]);
 
-  const handleImport = useCallback(
+  /** Étape 1 : lire le fichier et demander confirmation */
+  const handleFileSelected = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
       try {
         const json = await file.text();
-        await storage.importData(json);
-        setStatus({ type: "success", message: "Import réussi !" });
-        onImportComplete();
-        setTimeout(() => {
-          setStatus(null);
-          setOpen(false);
-        }, 2000);
+        // Validation rapide avant de demander confirmation
+        const parsed = JSON.parse(json);
+        if (!parsed.version || !Array.isArray(parsed.characters)) {
+          throw new Error("Format de données invalide");
+        }
+        setPendingJson(json);
+        setConfirmImport(true);
       } catch (error) {
         setStatus({
           type: "error",
-          message: `Erreur d'import : ${error instanceof Error ? error.message : "format invalide"}`,
+          message: `Erreur de lecture : ${error instanceof Error ? error.message : "format invalide"}`,
         });
       }
 
@@ -75,8 +79,37 @@ export function DataManager({ onImportComplete }: DataManagerProps) {
         fileInputRef.current.value = "";
       }
     },
-    [storage, onImportComplete]
+    []
   );
+
+  /** Étape 2 : effectuer l'import après confirmation */
+  const handleConfirmImport = useCallback(async () => {
+    if (!pendingJson) return;
+
+    try {
+      await storage.importData(pendingJson);
+      setStatus({ type: "success", message: "Import réussi !" });
+      setConfirmImport(false);
+      setPendingJson(null);
+      onImportComplete();
+      setTimeout(() => {
+        setStatus(null);
+        setOpen(false);
+      }, 2000);
+    } catch (error) {
+      setConfirmImport(false);
+      setPendingJson(null);
+      setStatus({
+        type: "error",
+        message: `Erreur d'import : ${error instanceof Error ? error.message : "format invalide"}`,
+      });
+    }
+  }, [pendingJson, storage, onImportComplete]);
+
+  const handleCancelImport = useCallback(() => {
+    setConfirmImport(false);
+    setPendingJson(null);
+  }, []);
 
   return (
     <>
@@ -123,7 +156,7 @@ export function DataManager({ onImportComplete }: DataManagerProps) {
               type="file"
               accept=".json"
               className="hidden"
-              onChange={handleImport}
+              onChange={handleFileSelected}
             />
 
             {/* Status */}
@@ -144,6 +177,30 @@ export function DataManager({ onImportComplete }: DataManagerProps) {
               </div>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog de confirmation d'import */}
+      <Dialog open={confirmImport} onOpenChange={(open) => !open && handleCancelImport()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <TriangleAlert className="h-5 w-5 text-destructive" />
+              Confirmer l&apos;import
+            </DialogTitle>
+            <DialogDescription>
+              L&apos;import va <strong>remplacer tous vos personnages actuels</strong>.
+              Cette action est irréversible. Pensez à exporter vos données avant de continuer.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="ghost" onClick={handleCancelImport}>
+              Annuler
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmImport}>
+              Remplacer mes données
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
