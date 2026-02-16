@@ -34,7 +34,22 @@ function saveEnvelope(envelope: StorageEnvelope): void {
   if (typeof window === "undefined") return;
 
   envelope.updatedAt = new Date().toISOString();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(envelope));
+  } catch (error) {
+    // P0 : gérer QuotaExceededError (iOS Safari ~5 MB)
+    if (
+      error instanceof DOMException &&
+      (error.name === "QuotaExceededError" ||
+        error.code === DOMException.QUOTA_EXCEEDED_ERR)
+    ) {
+      throw new Error(
+        "Espace de stockage insuffisant. Supprimez des personnages ou exportez vos données."
+      );
+    }
+    throw error;
+  }
 }
 
 function createEmptyEnvelope(): StorageEnvelope {

@@ -1,26 +1,24 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useDice } from "@/hooks/use-dice";
 import type { DiceRoll } from "@/lib/game-systems";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dices, Trash2 } from "lucide-react";
+import { Dices, Sparkles, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface DiceRollerProps {
-  /** Callback optionnel quand un résultat est obtenu */
-  onResult?: (roll: DiceRoll) => void;
   /** Afficher le bouton Tester la Chance ? */
   showLuckTest?: boolean;
   /** Chance actuelle pour le test */
   currentLuck?: number;
-  /** Callback quand on teste la chance */
-  onLuckTest?: (roll: DiceRoll, lucky: boolean) => void;
+  /** Callback quand un test de chance est résolu */
+  onLuckTest?: (roll: DiceRoll) => void;
 }
 
 export function DiceRoller({
-  onResult,
   showLuckTest,
   currentLuck,
   onLuckTest,
@@ -34,6 +32,18 @@ export function DiceRoller({
     clearHistory,
   } = useDice();
 
+  // Notifier le parent quand un Test de Chance est résolu
+  const prevHistoryLenRef = useRef(history.length);
+  useEffect(() => {
+    if (history.length > prevHistoryLenRef.current) {
+      const lastRoll = history[0];
+      if (lastRoll?.label === "Test de Chance" && onLuckTest) {
+        onLuckTest(lastRoll);
+      }
+    }
+    prevHistoryLenRef.current = history.length;
+  }, [history, onLuckTest]);
+
   const handleRoll1d6 = () => {
     rollOneDice();
   };
@@ -45,10 +55,6 @@ export function DiceRoller({
   const handleLuckTest = () => {
     rollTwoDice("Test de Chance");
   };
-
-  // Notifier le callback quand le résultat final arrive
-  // (on utilise l'historique pour ça, car il contient le résultat final)
-  const lastResult = history[0];
 
   return (
     <div className="flex flex-col gap-4">
@@ -93,6 +99,7 @@ export function DiceRoller({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-lg font-bold text-primary"
+            aria-live="polite"
           >
             Total : {currentRoll.total}
           </motion.p>
@@ -136,7 +143,7 @@ export function DiceRoller({
             onClick={handleLuckTest}
             disabled={isRolling || currentLuck <= 0}
           >
-            &#x2728; Tester la Chance
+            <Sparkles className="h-4 w-4" /> Tester la Chance
             {currentLuck > 0 && (
               <span className="text-xs opacity-70">
                 ({currentLuck} restant{currentLuck > 1 ? "s" : ""})

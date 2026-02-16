@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -37,17 +38,17 @@ export function Counter({
 
   const isDead = value <= 0 && min === 0;
 
-  const handleDecrement = () => {
+  const handleDecrement = useCallback(() => {
     if (value > min) {
       onChange(value - 1, `${label} : ${value} → ${value - 1}`);
     }
-  };
+  }, [value, min, onChange, label]);
 
-  const handleIncrement = () => {
+  const handleIncrement = useCallback(() => {
     if (value < max) {
       onChange(value + 1, `${label} : ${value} → ${value + 1}`);
     }
-  };
+  }, [value, max, onChange, label]);
 
   return (
     <div className="flex items-center gap-3">

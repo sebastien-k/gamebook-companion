@@ -99,7 +99,11 @@ export function CharacterSheet({
     <div className="flex flex-col gap-4 px-4 pb-6">
       {/* Alerte de mort */}
       {dead && (
-        <div className="rounded-lg border border-destructive bg-destructive/10 p-3 text-center text-sm text-destructive">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="rounded-lg border border-destructive bg-destructive/10 p-3 text-center text-sm text-destructive"
+        >
           &#x2620;&#xFE0F; Votre aventure est terminée...
         </div>
       )}

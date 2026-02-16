@@ -8,6 +8,7 @@ import { useStorage } from "@/hooks/use-storage";
 import type { FightingFantasyCharacter } from "@/lib/game-systems/fighting-fantasy";
 import { testLuck } from "@/lib/game-systems/fighting-fantasy";
 import type { DiceRoll, Character } from "@/lib/game-systems";
+import { useCallback } from "react";
 
 export default function DicePage() {
   const storage = useStorage();
@@ -25,14 +26,17 @@ export default function DicePage() {
 
   const ff = character as FightingFantasyCharacter | null;
 
-  const handleLuckTest = async (roll: DiceRoll, _lucky: boolean) => {
-    if (!ff) return;
-    const { lucky, newLuck } = testLuck(ff, roll.total);
-    await updateCharacter(
-      { currentLuck: newLuck } as Partial<Character>,
-      `Test de Chance : ${lucky ? "Chanceux" : "Malchanceux"} (${roll.total} vs ${ff.currentLuck})`
-    );
-  };
+  const handleLuckTest = useCallback(
+    async (roll: DiceRoll) => {
+      if (!ff) return;
+      const { lucky, newLuck } = testLuck(ff, roll.total);
+      await updateCharacter(
+        { currentLuck: newLuck } as Partial<Character>,
+        `Test de Chance : ${lucky ? "Chanceux" : "Malchanceux"} (${roll.total} vs ${ff.currentLuck})`
+      );
+    },
+    [ff, updateCharacter]
+  );
 
   return (
     <AppShell>

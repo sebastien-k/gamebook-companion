@@ -17,6 +17,23 @@ export function useCharacter(characterId: string | null) {
   const [undoEntry, setUndoEntry] = useState<UndoEntry | null>(null);
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Nettoyage du timer undo au démontage (P0 : éviter state update on unmounted)
+  useEffect(() => {
+    return () => {
+      if (undoTimerRef.current) {
+        clearTimeout(undoTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Reset undo quand on change de personnage
+  useEffect(() => {
+    setUndoEntry(null);
+    if (undoTimerRef.current) {
+      clearTimeout(undoTimerRef.current);
+    }
+  }, [characterId]);
+
   // Chargement initial
   useEffect(() => {
     if (!characterId) {
@@ -77,9 +94,16 @@ export function useCharacter(characterId: string | null) {
     [character, storage]
   );
 
-  /** Annule la dernière action */
+  /** Annule la dernière action (sécurisé : vérifie que c'est le bon personnage) */
   const undo = useCallback(async () => {
-    if (!undoEntry) return;
+    if (!undoEntry || !character) return;
+
+    // P0 : vérifier que l'undo correspond au personnage actuel
+    if (undoEntry.characterId !== character.id) {
+      console.warn("[useCharacter] Undo ignoré : personnage différent");
+      setUndoEntry(null);
+      return;
+    }
 
     try {
       const previousCharacter = JSON.parse(
@@ -95,7 +119,7 @@ export function useCharacter(characterId: string | null) {
     } catch (error) {
       console.error("[useCharacter] Erreur undo :", error);
     }
-  }, [undoEntry, storage]);
+  }, [undoEntry, character, storage]);
 
   /** Annule l'undo manuellement (dismiss) */
   const dismissUndo = useCallback(() => {
