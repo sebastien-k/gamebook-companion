@@ -24,9 +24,11 @@ import {
   X,
   BookOpen,
   Undo2,
+  Pencil,
 } from "lucide-react";
 import { nanoid } from "nanoid";
 import { cn } from "@/lib/utils";
+import { EditCharacterDialog } from "./edit-character-dialog";
 
 interface CharacterSheetProps {
   character: FightingFantasyCharacter;
@@ -44,6 +46,7 @@ export function CharacterSheet({
   onDismissUndo,
 }: CharacterSheetProps) {
   const [newItemName, setNewItemName] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
   const dead = isDead(character);
   const critical = isStaminaCritical(character);
 
@@ -112,9 +115,18 @@ export function CharacterSheet({
       <div className="sticky top-0 z-30 -mx-4 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-sm">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="font-display text-xl text-primary">
-              {character.name}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-display text-xl text-primary">
+                {character.name}
+              </h2>
+              <button
+                className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground hover:text-primary"
+                onClick={() => setEditOpen(true)}
+                aria-label="Modifier le personnage"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </button>
+            </div>
             {character.bookTitle && (
               <p className="flex items-center gap-1 text-xs text-muted-foreground">
                 <BookOpen className="h-3 w-3" />
@@ -332,6 +344,14 @@ export function CharacterSheet({
           />
         </CardContent>
       </Card>
+
+      {/* Dialog d'édition du personnage */}
+      <EditCharacterDialog
+        character={character}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        onSave={(updates) => onUpdate(updates, "Personnage modifié")}
+      />
 
       {/* Snackbar Undo */}
       {undoEntry && (
