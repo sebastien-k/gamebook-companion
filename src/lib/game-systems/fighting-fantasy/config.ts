@@ -7,7 +7,7 @@ import type { GameSystem } from "../types";
 export const FIGHTING_FANTASY_CONFIG = {
   id: "fighting-fantasy" as GameSystem,
   name: "Défis Fantastiques",
-  shortName: "DF",
+  shortName: "Défis Fantastiques",
   description: "Le système classique de Steve Jackson et Ian Livingstone",
 
   /** Formules de création */

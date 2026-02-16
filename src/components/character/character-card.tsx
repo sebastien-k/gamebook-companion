@@ -6,7 +6,7 @@ import type { FightingFantasyCharacter } from "@/lib/game-systems/fighting-fanta
 import { isStaminaCritical } from "@/lib/game-systems/fighting-fantasy";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Swords, Heart, Sparkles, BookOpen } from "lucide-react";
+import { Swords, Heart, Sparkles, BookOpen, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CharacterCardProps {
@@ -48,7 +48,7 @@ export function CharacterCard({
               </p>
             )}
           </div>
-          <Badge variant="secondary" className="shrink-0 text-xs">
+          <Badge variant="secondary" className="shrink-0 text-[10px]">
             {FIGHTING_FANTASY_CONFIG.shortName}
           </Badge>
         </div>
@@ -98,14 +98,14 @@ export function CharacterCard({
 
       {/* Bouton supprimer (visible au hover desktop + toujours visible sur mobile) */}
       <button
-        className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-opacity hover:bg-destructive/20 hover:text-destructive sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
+        className="absolute bottom-2 right-2 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-opacity hover:bg-destructive/20 hover:text-destructive sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(character.id);
         }}
         aria-label={`Supprimer ${character.name}`}
       >
-        &times;
+        <Trash2 className="h-3.5 w-3.5" />
       </button>
     </Card>
   );
