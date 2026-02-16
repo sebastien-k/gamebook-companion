@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Background circle with medieval dark theme -->
+  <rect width="512" height="512" rx="96" fill="#1a1a2e"/>
+
+  <!-- Inner glow circle -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#c9a84c" stroke-width="3" opacity="0.3"/>
+
+  <!-- Stylized D6 die - center -->
+  <g transform="translate(256, 240)">
+    <!-- Die body -->
+    <rect x="-75" y="-75" width="150" height="150" rx="20" fill="#16213e" stroke="#c9a84c" stroke-width="4"/>
+
+    <!-- Die dots (showing 6) -->
+    <!-- Left column -->
+    <circle cx="-35" cy="-35" r="12" fill="#c9a84c"/>
+    <circle cx="-35" cy="0" r="12" fill="#c9a84c"/>
+    <circle cx="-35" cy="35" r="12" fill="#c9a84c"/>
+    <!-- Right column -->
+    <circle cx="35" cy="-35" r="12" fill="#c9a84c"/>
+    <circle cx="35" cy="0" r="12" fill="#c9a84c"/>
+    <circle cx="35" cy="35" r="12" fill="#c9a84c"/>
+  </g>
+
+  <!-- Crossed swords behind the die -->
+  <g opacity="0.6">
+    <!-- Sword 1 (top-left to bottom-right) -->
+    <line x1="120" y1="120" x2="392" y2="392" stroke="#c9a84c" stroke-width="5" stroke-linecap="round"/>
+    <!-- Sword 1 guard -->
+    <line x1="140" y1="160" x2="180" y2="120" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+    <!-- Sword 1 pommel -->
+    <circle cx="120" cy="120" r="8" fill="#c9a84c"/>
+
+    <!-- Sword 2 (top-right to bottom-left) -->
+    <line x1="392" y1="120" x2="120" y2="392" stroke="#c9a84c" stroke-width="5" stroke-linecap="round"/>
+    <!-- Sword 2 guard -->
+    <line x1="372" y1="160" x2="332" y2="120" stroke="#c9a84c" stroke-width="4" stroke-linecap="round"/>
+    <!-- Sword 2 pommel -->
+    <circle cx="392" cy="120" r="8" fill="#c9a84c"/>
+  </g>
+
+  <!-- App name at bottom -->
+  <text x="256" y="440" text-anchor="middle" fill="#c9a84c" font-family="serif" font-size="36" font-weight="bold" letter-spacing="2">
+    GAMEBOOK
+  </text>
+</svg>
