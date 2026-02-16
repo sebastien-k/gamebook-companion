@@ -110,9 +110,9 @@ export function CharacterSheet({
 
       {/* En-tête sticky : stats principales + tracker page */}
       <div className="sticky top-0 z-30 -mx-4 border-b border-border bg-background/95 px-4 py-3 backdrop-blur-sm">
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div>
-            <h2 className="font-display text-lg text-primary">
+            <h2 className="font-display text-xl text-primary">
               {character.name}
             </h2>
             {character.bookTitle && (
